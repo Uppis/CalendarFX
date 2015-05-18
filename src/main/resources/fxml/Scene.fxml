@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="220.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="calendarfx.FXMLController">
+   <children>
+      <VBox alignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <HBox maxHeight="-Infinity" minHeight="-Infinity" styleClass="title-pane" VBox.vgrow="NEVER">
+               <children>
+                  <Label fx:id="fldMonth" alignment="BASELINE_CENTER" focusTraversable="false" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="20.0" styleClass="title-label" text="&lt;month year&gt;" BorderPane.alignment="TOP_CENTER" HBox.hgrow="ALWAYS" />
+               </children>
+            </HBox>
+            <GridPane alignment="TOP_CENTER" VBox.vgrow="ALWAYS">
+               <columnConstraints>
+                  <ColumnConstraints fillWidth="false" hgrow="NEVER" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints fillHeight="false" maxHeight="-Infinity" minHeight="-Infinity" valignment="TOP" vgrow="NEVER" />
+                  <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+               <children>
+                  <GridPane fx:id="pnlWeekdays" alignment="TOP_CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="18.0" styleClass="weekday-pane" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.vgrow="NEVER">
+                    <columnConstraints>
+                      <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" minWidth="24.0" />
+                      <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" minWidth="24.0" />
+                        <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" minWidth="24.0" />
+                        <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" minWidth="24.0" />
+                        <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" minWidth="24.0" />
+                        <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" minWidth="24.0" />
+                        <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" minWidth="24.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="16.0" vgrow="NEVER" />
+                    </rowConstraints>
+                  </GridPane>
+                  <GridPane fx:id="pnlWeeks" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="18.0" styleClass="week-pane" GridPane.halignment="LEFT" GridPane.hgrow="NEVER" GridPane.rowIndex="1" GridPane.valignment="TOP" GridPane.vgrow="ALWAYS">
+                    <columnConstraints>
+                      <ColumnConstraints halignment="LEFT" hgrow="NEVER" minWidth="24.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="24.0" vgrow="ALWAYS" />
+                      <RowConstraints minHeight="24.0" vgrow="ALWAYS" />
+                      <RowConstraints minHeight="24.0" vgrow="ALWAYS" />
+                        <RowConstraints minHeight="24.0" vgrow="ALWAYS" />
+                        <RowConstraints minHeight="24.0" vgrow="ALWAYS" />
+                        <RowConstraints minHeight="24.0" vgrow="ALWAYS" />
+                    </rowConstraints>
+                  </GridPane>
+                  <GridPane fx:id="pnlDays" minHeight="-Infinity" minWidth="-Infinity" prefHeight="120.0" prefWidth="140.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                    <columnConstraints>
+                      <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" minWidth="24.0" />
+                      <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" minWidth="24.0" />
+                        <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" minWidth="24.0" />
+                        <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" minWidth="24.0" />
+                        <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" minWidth="24.0" />
+                        <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" minWidth="24.0" />
+                        <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" minWidth="24.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="24.0" vgrow="ALWAYS" />
+                      <RowConstraints minHeight="24.0" vgrow="ALWAYS" />
+                      <RowConstraints minHeight="24.0" vgrow="ALWAYS" />
+                        <RowConstraints minHeight="24.0" vgrow="ALWAYS" />
+                        <RowConstraints minHeight="24.0" vgrow="ALWAYS" />
+                        <RowConstraints minHeight="24.0" vgrow="ALWAYS" />
+                    </rowConstraints>
+                  </GridPane>
+                  <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="18.0" prefWidth="18.0" styleClass="weekday-pane" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.valignment="CENTER" GridPane.vgrow="NEVER" />
+               </children>
+            </GridPane>
+            <HBox fx:id="pnlNavigator" alignment="CENTER" fillHeight="false" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" VBox.vgrow="NEVER">
+               <children>
+                  <Button fx:id="cmdPrevYear" minHeight="16.0" mnemonicParsing="false" onAction="#onCmdPrevYearAction" text="&lt;&lt;">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="cmdFirstMonth" layoutX="10.0" layoutY="10.0" maxWidth="-Infinity" minHeight="16.0" mnemonicParsing="false" onAction="#onCmdFirstMonthAction" text="|&lt;">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets left="3.0" />
+                     </HBox.margin>
+                  </Button>
+                  <Button fx:id="cmdPrevMonth" layoutX="43.0" layoutY="10.0" minHeight="16.0" mnemonicParsing="false" onAction="#onCmdPrevMonthAction" text="&lt;">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets left="3.0" />
+                     </HBox.margin>
+                  </Button>
+                  <Button fx:id="cmdToday" layoutX="71.0" layoutY="10.0" minHeight="16.0" mnemonicParsing="false" onAction="#onCmdTodayAction" text="o">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets left="3.0" />
+                     </HBox.margin>
+                  </Button>
+                  <Button fx:id="cmdNextMonth" layoutX="96.0" layoutY="10.0" minHeight="16.0" mnemonicParsing="false" onAction="#onCmdNextMonthAction" text="&gt;">
+                     <font>
+                        <Font name="System Bold" size="10.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets left="3.0" />
+                     </HBox.margin>
+                  </Button>
+                  <Button fx:id="cmdLastMonth" layoutX="120.0" layoutY="10.0" minHeight="16.0" mnemonicParsing="false" onAction="#onCmdLastMonthAction" text="&gt;|">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets left="3.0" />
+                     </HBox.margin>
+                  </Button>
+                  <Button fx:id="cmdNextYear" layoutX="145.0" layoutY="10.0" minHeight="16.0" mnemonicParsing="false" onAction="#onCmdNextYearAction" text="&gt;&gt;">
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets left="3.0" />
+                     </HBox.margin>
+                  </Button>
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>

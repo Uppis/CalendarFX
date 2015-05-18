@@ -1,0 +1,36 @@
+
+.title-label {
+    -fx-font-size: 1.2em;
+    /*-fx-font-weight: bold;*/
+    -fx-text-fill:  white;
+}
+
+.weekday-label {
+    -fx-text-fill:  white;
+}
+
+.week-label {
+    -fx-font-size: 0.8em;
+}
+
+.sunday-label {
+    -fx-text-fill:  red;
+}
+
+.today-label {
+    -fx-font-weight: bold;
+    -fx-border-color: black;
+    -fx-border-width: 2px;
+}
+
+.title-pane {
+    -fx-background-color: lightsteelblue;
+}
+
+.weekday-pane {
+    -fx-background-color: black;
+}
+
+.week-pane {
+    -fx-background-color: #ffc800;
+}
