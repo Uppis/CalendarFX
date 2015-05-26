@@ -2,7 +2,7 @@
 .title-label {
     -fx-font-size: 1.2em;
     /*-fx-font-weight: bold;*/
-    -fx-text-fill:  white;
+    /*-fx-text-fill:  white;*/
 }
 
 .weekday-label {

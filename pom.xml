@@ -104,5 +104,11 @@
             </plugin>
         </plugins>
     </build>
-
+    <dependencies>
+        <dependency>
+            <groupId>com.nordea.common</groupId>
+            <artifactId>nordeacommon</artifactId>
+            <version>1.11</version>
+        </dependency>
+    </dependencies>
 </project>
