@@ -128,16 +128,16 @@ public class CalendarPaneController implements Initializable {
     }
 
     private void moveDate(ChronoUnit unit, int amount) {
-        currentMonth.plus(amount, unit);
+        currentMonth = currentMonth.plus(amount, unit);
         setCalendarToCurrentMonth();
     }
 
     private void setCalendarToCurrentMonth() {
-        fldMonth.setText(months[currentMonth.getMonthValue()].getDisplayName(TextStyle.FULL, locale) + " " + currentMonth.getYear());
+        fldMonth.setText(currentMonth.getMonth().getDisplayName(TextStyle.FULL, locale) + " " + currentMonth.getYear());
         maybeShowToday(currentMonth);
         Map<LocalDate, String> flagDays = new LinkedHashMap<>();
         getFlagDays(currentMonth.getYear(), flagDays);
-        LocalDate d = currentMonth.plusDays(-gridIndex(currentMonth));  // start from first day in calendar view
+        LocalDate d = currentMonth.plusDays(-gridIndex(currentMonth) - 1);  // start from 1 day "behind" the current month in calendar view
         for (int row = 0; row < NBR_OF_ROWS; row++) {
             boolean daysInRow = false;
             for (int col = 0; col < NBR_OF_COLUMNS; col++) {
@@ -145,6 +145,7 @@ public class CalendarPaneController implements Initializable {
                 Label lbl = (Label)pnlDays.getChildren().get(ix);
                 lbl.setBackground(null);
                 lbl.setTooltip(null);
+                d = d.plusDays(1);
                 if (d.getMonth().equals(currentMonth.getMonth())) {
                     lbl.setText(String.valueOf(d.getDayOfMonth()));
                     if (isFeastDay(d)) {
@@ -160,11 +161,11 @@ public class CalendarPaneController implements Initializable {
                 } else {
                     lbl.setText("");
                 }
-                d = d.plusDays(1);
             }
             Label weekLbl = (Label)pnlWeeks.getChildren().get(row);
             if (daysInRow) {
-                weekLbl.setText(String.valueOf(d.get(WeekFields.ISO.weekOfWeekBasedYear())));
+                int weekNumber = d.get(WeekFields.ISO.weekOfWeekBasedYear());
+                weekLbl.setText(String.valueOf(weekNumber));
             } else {
                 weekLbl.setText("");
             }
@@ -172,7 +173,7 @@ public class CalendarPaneController implements Initializable {
     }
 
     private int gridIndex(LocalDate day) {
-        int start = LocalDate.of(day.getYear(), day.getMonth(), 1).getDayOfWeek().getValue();  // start == grid index of the 1st of month
+        int start = LocalDate.of(day.getYear(), day.getMonth(), 1).getDayOfWeek().getValue() - 1;  // start == grid index of the 1st of month
         return start + day.getDayOfMonth() - 1;
     }
 
@@ -223,16 +224,16 @@ public class CalendarPaneController implements Initializable {
             int year = date.getYear();
             boolean since_1992 = year >= 1992;
 
-            if (month == Month.JANUARY && (day == 1 || (day == 6 && since_1992))) {// // uudenvuoden pÃ¤ivÃ¤, loppiainen
+            if (month == Month.JANUARY && (day == 1 || (day == 6 && since_1992))) {// // uudenvuoden päivä, loppiainen
                 ret = true;
             } else if (month == Month.MAY && day == 1) {// vappu
                 ret = true;
             } else if (month == Month.JUNE) { // juhannusaatto ?
                 ret = day == getMidsummerDay(year);
-            } else if (month == Month.DECEMBER && (day == 6 || (day >= 25 && day <= 26))) {// itsenÃ¤isyyspÃ¤ivÃ¤, Joulun pyhÃ¤t
+            } else if (month == Month.DECEMBER && (day == 6 || (day >= 25 && day <= 26))) {// itsenäisyyspäivä, Joulun pyhät
                 ret = true;
-            } else { // PÃ¤Ã¤siÃ¤inen ja helatorstai
-                LocalDate eastern = getEastern(year);   // PÃ¤Ã¤siÃ¤issunnuntai
+            } else { // Pääsiäinen ja helatorstai
+                LocalDate eastern = getEastern(year);   // Pääsiäissunnuntai
                 if (date.equals(eastern) || date.equals(eastern.minusDays(2)) || date.equals(eastern.plusDays(1))) {
                     ret = true;
                 } else if (date.equals(eastern.plusDays(39)) && since_1992) {// helatorstai
