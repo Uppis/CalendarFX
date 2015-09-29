@@ -1,4 +1,4 @@
-package calendarfx;
+package com.vajasoft.calendarfx;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -40,12 +40,12 @@ public class CalendarPaneController implements Initializable {
     private static final int NBR_OF_COLUMNS = 7;
     private static final int NBR_OF_ROWS = 6;
     private static final List<FlagDaySpec> FLAGDAY_CONFIG = readFlagDayConfig();
+    private static final Image flag = new Image("/img/suomi_top_left.gif");
+    private static final Background FLAG_BACKGROUND = new Background(new BackgroundImage(flag, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT));
 
     private final LocalDate today = LocalDate.now();
 //    private final int firstDayOfWeek = today.getFirstDayOfWeek();
     private LocalDate currentMonth;
-    private final Month[] months = Month.values();
-    private final Image flag = new Image("/img/suomi_top_left.gif");
     private final boolean flagOn = true;
 
     @FXML
@@ -133,7 +133,7 @@ public class CalendarPaneController implements Initializable {
     }
 
     private void setCalendarToCurrentMonth() {
-        fldMonth.setText(currentMonth.getMonth().getDisplayName(TextStyle.FULL, locale) + " " + currentMonth.getYear());
+        fldMonth.setText(currentMonth.getMonth().getDisplayName(TextStyle.FULL_STANDALONE, locale) + " " + currentMonth.getYear());
         maybeShowToday(currentMonth);
         Map<LocalDate, String> flagDays = new LinkedHashMap<>();
         getFlagDays(currentMonth.getYear(), flagDays);
@@ -143,7 +143,7 @@ public class CalendarPaneController implements Initializable {
             for (int col = 0; col < NBR_OF_COLUMNS; col++) {
                 int ix = row * NBR_OF_COLUMNS + col;
                 Label lbl = (Label)pnlDays.getChildren().get(ix);
-                lbl.setBackground(null);
+                lbl.setBackground(Background.EMPTY);
                 lbl.setTooltip(null);
                 d = d.plusDays(1);
                 if (d.getMonth().equals(currentMonth.getMonth())) {
@@ -154,7 +154,7 @@ public class CalendarPaneController implements Initializable {
                         lbl.getStyleClass().remove("sunday-label");
                     }
                     if (flagOn && flagDays.containsKey(d)) {
-                        lbl.setBackground(new Background(new BackgroundImage(flag, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT)));
+                        lbl.setBackground(FLAG_BACKGROUND);
                         lbl.setTooltip(new Tooltip(flagDays.get(d)));
                     }
                     daysInRow = true;
@@ -269,9 +269,9 @@ public class CalendarPaneController implements Initializable {
     }
 
     private void getFlagDays(int forYear, Map<LocalDate, String> to) {
-        for (FlagDaySpec fd : FLAGDAY_CONFIG) {
+        FLAGDAY_CONFIG.stream().forEach((fd) -> {
             to.put(fd.getFlagDay(forYear), fd.getDescription());
-        }
+        });
     }
 
     private static List<FlagDaySpec> readFlagDayConfig() {

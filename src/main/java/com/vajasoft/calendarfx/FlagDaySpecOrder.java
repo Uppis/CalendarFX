@@ -1,7 +1,7 @@
-package calendarfx;
+package com.vajasoft.calendarfx;
 
-import com.nordea.common.util.Misc;
-import com.nordea.common.util.ValueObjectMarker;
+import com.vajasoft.util.Misc;
+import com.vajasoft.util.ValueObjectMarker;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 

@@ -1,4 +1,4 @@
-package calendarfx;
+package com.vajasoft.calendarfx;
 
 import javafx.application.Application;
 import static javafx.application.Application.launch;
