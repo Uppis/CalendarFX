@@ -36,12 +36,12 @@ import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.GridPane;
 
 public class CalendarPaneController implements Initializable {
-    private static final Locale locale = Locale.getDefault(Locale.Category.FORMAT);
+    private static final Locale LOCALE = Locale.getDefault(Locale.Category.FORMAT);
     private static final int NBR_OF_COLUMNS = 7;
     private static final int NBR_OF_ROWS = 6;
     private static final List<FlagDaySpec> FLAGDAY_CONFIG = readFlagDayConfig();
-    private static final Image flag = new Image("/img/suomi_top_left.gif");
-    private static final Background FLAG_BACKGROUND = new Background(new BackgroundImage(flag, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT));
+    private static final Image FLAG = new Image("/img/suomi_top_left.gif");
+    private static final Background FLAG_BACKGROUND = new Background(new BackgroundImage(FLAG, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT));
 
     private final LocalDate today = LocalDate.now();
 //    private final int firstDayOfWeek = today.getFirstDayOfWeek();
@@ -76,7 +76,7 @@ public class CalendarPaneController implements Initializable {
         addLabels(pnlWeekdays, NBR_OF_COLUMNS, 1);
         for (int i = 1; i <= NBR_OF_COLUMNS; i++) {
             Label weekday = (Label)pnlWeekdays.getChildren().get(i - 1);
-            weekday.setText(DayOfWeek.of(i).getDisplayName(TextStyle.SHORT, locale));
+            weekday.setText(DayOfWeek.of(i).getDisplayName(TextStyle.SHORT, LOCALE));
             if (i == DayOfWeek.SUNDAY.getValue()) {
                 weekday.getStyleClass().add("sunday-label");
             } else {
@@ -133,7 +133,7 @@ public class CalendarPaneController implements Initializable {
     }
 
     private void setCalendarToCurrentMonth() {
-        fldMonth.setText(currentMonth.getMonth().getDisplayName(TextStyle.FULL_STANDALONE, locale) + " " + currentMonth.getYear());
+        fldMonth.setText(currentMonth.getMonth().getDisplayName(TextStyle.FULL_STANDALONE, LOCALE) + " " + currentMonth.getYear());
         maybeShowToday(currentMonth);
         Map<LocalDate, String> flagDays = new LinkedHashMap<>();
         getFlagDays(currentMonth.getYear(), flagDays);
@@ -145,13 +145,12 @@ public class CalendarPaneController implements Initializable {
                 Label lbl = (Label)pnlDays.getChildren().get(ix);
                 lbl.setBackground(Background.EMPTY);
                 lbl.setTooltip(null);
+                lbl.getStyleClass().remove("sunday-label");
                 d = d.plusDays(1);
                 if (d.getMonth().equals(currentMonth.getMonth())) {
                     lbl.setText(String.valueOf(d.getDayOfMonth()));
                     if (isFeastDay(d)) {
                         lbl.getStyleClass().add("sunday-label");
-                    } else {
-                        lbl.getStyleClass().remove("sunday-label");
                     }
                     if (flagOn && flagDays.containsKey(d)) {
                         lbl.setBackground(FLAG_BACKGROUND);
@@ -215,12 +214,14 @@ public class CalendarPaneController implements Initializable {
     private static boolean isFeastDay(LocalDate date) {
         boolean ret = false;
         DayOfWeek weekday = date.getDayOfWeek();
+        int day = date.getDayOfMonth();
+        Month month = date.getMonth();
 
         if (weekday == DayOfWeek.SUNDAY) {
             ret = true;
+        } else if (weekday == DayOfWeek.SATURDAY && ((month == Month.OCTOBER && day == 31) || (month == Month.NOVEMBER && day <= 6))) { // pyhäinpäivä
+            ret = true;
         } else {
-            int day = date.getDayOfMonth();
-            Month month = date.getMonth();
             int year = date.getYear();
             boolean since_1992 = year >= 1992;
 
@@ -275,7 +276,7 @@ public class CalendarPaneController implements Initializable {
     }
 
     private static List<FlagDaySpec> readFlagDayConfig() {
-        Pattern CONFIG_LINE = Pattern.compile("(\\d{1,2})\\s+(?:(\\d{1,2}-\\d{1,2})|(\\d\\.)|(\\d{1,2}))\\s+([A-Z]+|)\\s+\"(.*)\"");
+        Pattern CONFIG_LINE = Pattern.compile("(\\d{1,2})\\s+(?:(\\d{1,2}->)|(\\d\\.)|(\\d{1,2}))\\s+([A-Z]+|)\\s+\"(.*)\"");
         try {
             ArrayList<FlagDaySpec> flagDayConfig = new ArrayList<>();
             BufferedReader conf = new BufferedReader(new InputStreamReader(CalendarPaneController.class.getResourceAsStream("/config/flagdays.conf")));
@@ -288,9 +289,10 @@ public class CalendarPaneController implements Initializable {
                         flagDayConfig.add(new FlagDaySpecFixed(month, Integer.parseInt(m.group(4)), m.group(6)));
                     } else if (m.group(3) != null) {    // orderOfDayOfWeek
                         flagDayConfig.add(new FlagDaySpecOrder(month, Integer.parseInt(m.group(3).substring(0, m.group(3).length() - 1)), DayOfWeek.valueOf(m.group(5)), m.group(6)));
-                    } else if (m.group(2) != null) {    // numberRange
-                        String[] parts = m.group(2).split("-");
-                        flagDayConfig.add(new FlagDaySpecRange(month, new Integer[]{Integer.parseInt(parts[0]), Integer.parseInt(parts[1])}, DayOfWeek.valueOf(m.group(5)), m.group(6)));
+                    } else if (m.group(2) != null) {    // dayRange
+                        String range = m.group(2);
+                        String startDay = range.substring(0, range.indexOf("->"));
+                        flagDayConfig.add(new FlagDaySpecRange(month, Integer.parseInt(startDay), DayOfWeek.valueOf(m.group(5)), m.group(6)));
                     } else {
                         throw new RuntimeException("Invalid configuration: " + line);
                     }
